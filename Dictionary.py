@@ -71,6 +71,7 @@ class Dictionary():
         except Exception as e:
             print("The following error occured while trying to read the file: " + str(e))
        
+
     def replace_british_words(self) -> list():
         """
         Dictionary.replace_british_words() aims to replace words captured by patterns in the dict we have, with counter part American words.
@@ -88,6 +89,7 @@ class Dictionary():
         except Exception as e:
             print(str(e))
     
+
     def replace_titles(self) -> None:
         """
         Dictionary.replace() aims to replace the titles, that we generally address people with
@@ -111,6 +113,7 @@ class Dictionary():
         except Exception as e:
             print(str(e))
     
+
     def write_log(self, calling_method, original_text, modified_text) -> None:
         """
         write_log method, writes three statements to changes_log.txt everytime it is called,
@@ -123,6 +126,7 @@ class Dictionary():
 
         except Exception as e:
             print("The following error occured while trying to write changes to changes_log.txt: " + str(e))
+
 
     def flush_output(self, filename) -> bool:
         """
@@ -139,5 +143,10 @@ class Dictionary():
         except Exception as e:
             print("The following error occured while writing output to "+ filename+ " " + str(e))
             return False
+
+    #Destructor is responsible for closing all file handlers that have been used :)
+    def __del__(self) -> None:
+        self.file_handler.close()
+        self.output_handler.close()
 
 Dictionary().process_regex("theWaroftheWorlds.txt")
