@@ -47,6 +47,9 @@ class Dictionary():
 
     def read_file(self, filename):
         try:
+            if self.file_handler != None:
+                self.file_handler = self.file_handler.close()
+
             self.file_handler = open(self.CURRENT_PATH + filename, "r", encoding = "UTF-8")
             self.text = self.file_handler.read()
         except Exception as e:
@@ -157,7 +160,12 @@ class Dictionary():
         4. Tokenize
         5. Flush the output to dictionary.txt
         """
-        pass
+        try:
+            self.read_file(filename)
+
+            #make all the words to be of same CASE: lower
+        except:
+            pass
 
     #Destructor is responsible for closing all file handlers that have been used :)
     def __del__(self) -> None:
