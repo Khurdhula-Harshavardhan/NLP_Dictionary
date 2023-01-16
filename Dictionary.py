@@ -8,16 +8,13 @@ class Dictionary():
 
     #Constructor sets up all the global variables.
     def __init__(self) -> None:
-        self.file_handler = open("theWarofTheWorlds.txt", encoding='UTF-8')
-        print("Successfully opened the file.")
-        self.printer()
+        try:
+            self.file_handler = open("theWarofTheWorlds.txt", encoding='UTF-8')
+            print("Successfully opened the file.")
+            self.printer()
+        except Exception as e:
+            print("The following error occured while trying to read the file: "+str(e))
 
-
-    def printer(self) -> None:
-        
-        with open('theWarofTheWorlds.txt',  encoding='UTF-8') as f:
-            contents = f.read()
-            print(contents)
 
 
 Dictionary()
