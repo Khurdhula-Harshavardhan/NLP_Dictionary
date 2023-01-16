@@ -43,7 +43,14 @@ class Dictionary():
 
         #defining a constant for current directory. 
         self.CURRENT_PATH = os.getcwd()+"/"
+        self.log_handler = open(self.CURRENT_PATH+ "changes_log.txt", "w+", encoding="UTF-8")
 
+    def read_file(self, filename):
+        try:
+            self.file_handler = open(self.CURRENT_PATH + filename, "r", encoding = "UTF-8")
+            self.text = self.file_handler.read()
+        except Exception as e:
+            print("The following error occured while trying to read " + filename + str(e))
 
     def process_regex(self, filename) -> None:
         """
@@ -57,19 +64,15 @@ class Dictionary():
         """
 
         try:
-            self.file_handler = open(self.CURRENT_PATH + filename, "r", encoding = "UTF-8")
-            self.log_handler = open(self.CURRENT_PATH+ "changes_log.txt", "w+", encoding="UTF-8")
-            self.text = self.file_handler.read()
-
+            self.read_file(filename)
             self.text = self.replace_british_words()
             self.text = self.text.split("\n")
             self.replace_titles()
 
             if self.flush_output("regex.txt"):
                 print("Output stored to 'regex.txt'")
-
-        except Exception as e:
-            print("The following error occured while trying to read the file: " + str(e))
+        except:
+            print("Failed to process text!")
        
 
     def replace_british_words(self) -> list():
@@ -154,6 +157,7 @@ class Dictionary():
         4. Tokenize
         5. Flush the output to dictionary.txt
         """
+        pass
 
     #Destructor is responsible for closing all file handlers that have been used :)
     def __del__(self) -> None:
