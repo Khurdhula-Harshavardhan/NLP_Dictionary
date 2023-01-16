@@ -15,6 +15,7 @@ class Dictionary():
     CURRENT_PATH = None
     #total_words_replaced
     #total_characters_discarded
+    dictionary = dict()
     
     #Constructor sets up all the global variables.
     def __init__(self) -> None:
@@ -49,9 +50,8 @@ class Dictionary():
         try:
             if self.file_handler != None:
                 self.file_handler = self.file_handler.close()
-
             self.file_handler = open(self.CURRENT_PATH + filename, "r", encoding = "UTF-8")
-            self.text = self.file_handler.read()
+            
         except Exception as e:
             print("The following error occured while trying to read " + filename + str(e))
 
@@ -68,6 +68,7 @@ class Dictionary():
 
         try:
             self.read_file(filename)
+            self.text = self.file_handler.read()
             self.text = self.replace_british_words()
             self.text = self.text.split("\n")
             self.replace_titles()
@@ -162,14 +163,33 @@ class Dictionary():
         """
         try:
             self.read_file(filename)
-
+            self.text = self.file_handler.read()
+            self.text = self.text.lower()
+            self.tokenize()
             #make all the words to be of same CASE: lower
+            
         except:
-            pass
+            print("lower cannot be used on list")
+
+
+    def tokenize(self) -> None:
+        """
+        discard_duplicates, aims to tokenize all words of the text.
+        This is achieved by re.findall()
+        """
+        try:
+            self.text = re.findall("[a-z]+",self.text)
+            print(self.text)
+        except Exception as e:
+            print("The following error occured while trying to tokenize text "+ str(e))
+        
+
 
     #Destructor is responsible for closing all file handlers that have been used :)
     def __del__(self) -> None:
         self.file_handler.close()
-        self.output_handler.close()
+        #self.output_handler.close()
 
-Dictionary().process_regex("theWaroftheWorlds.txt")
+temporary = Dictionary()
+temporary.process_regex("theWaroftheWorlds.txt")
+temporary.normalize_text("regex.txt")
