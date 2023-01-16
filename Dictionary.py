@@ -59,9 +59,10 @@ class Dictionary():
         try:
             self.file_handler = open(self.CURRENT_PATH + filename, "r", encoding = "UTF-8")
             self.log_handler = open(self.CURRENT_PATH+ "changes_log.txt", "w+", encoding="UTF-8")
-            self.text = self.file_handler.readlines()
+            self.text = self.file_handler.read()
 
-            self.replace_british_words()
+            self.text = self.replace_british_words()
+            self.text = self.text.split("\n")
             self.replace_titles()
 
             if self.flush_output("regex.txt"):
@@ -70,7 +71,7 @@ class Dictionary():
         except Exception as e:
             print("The following error occured while trying to read the file: " + str(e))
        
-    def replace_british_words(self) -> None:
+    def replace_british_words(self) -> list():
         """
         Dictionary.replace_british_words() aims to replace words captured by patterns in the dict we have, with counter part American words.
         This is achieved by using re.sub() method.
@@ -79,16 +80,11 @@ class Dictionary():
         """
 
         try:
-            for line in self.text:
-                for patternn in self.british_to_american_text_patterns.keys():
-                    before_change = line
-                    after_change = re.sub(patternn, self.british_to_american_text_patterns[patternn], line)
+            for patternn in self.british_to_american_text_patterns.keys():
+                self.text = re.sub(patternn, self.british_to_american_text_patterns[patternn], self.text)
+                self.write_log("Replacing British Words using the pattern:", patternn , self.british_to_american_text_patterns[patternn])
 
-                    if before_change != after_change:
-                        self.write_log("Replacing British Words", before_change, after_change)
-
-                    line = after_change
-                    
+            return self.text
         except Exception as e:
             print(str(e))
     
@@ -122,7 +118,7 @@ class Dictionary():
         """
 
         try:
-            line = "\n" + calling_method + "\n" + original_text + modified_text + "\n"
+            line = "\n" + calling_method + "\n" + original_text +"\n"+ modified_text + "\n"
             self.log_handler.write(line)
 
         except Exception as e:
@@ -137,7 +133,8 @@ class Dictionary():
         """
         try:
             self.output_handler = open(self.CURRENT_PATH + filename, "w+", encoding="UTF-8")
-            self.output_handler.writelines(self.text)
+            self.text = "\n".join(self.text)
+            self.output_handler.write(self.text)
             return True
         except Exception as e:
             print("The following error occured while writing output to "+ filename+ " " + str(e))
