@@ -20,7 +20,7 @@ Language: English
 
 *** START OF THE PROJECT GUTENBERG EBOOK THE WAR OF THE WORLDS ***
 
-cover 
+cover
 
 
 
