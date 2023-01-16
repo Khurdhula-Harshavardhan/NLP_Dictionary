@@ -171,6 +171,7 @@ class Dictionary():
             self.text = self.text.lower() #setting the text case to Lower.
             self.discard_punctuations() #discards the special characters.
             self.tokenize() #breaking down the text into a list of words.
+            self.remove_duplicates()
             
         except Exception as e:
             print(str(e))
@@ -193,16 +194,33 @@ class Dictionary():
         """
         try:
             self.text = re.findall("[a-z]+",self.text)
-            print(len(self.text))
         except Exception as e:
             print("The following error occured while trying to tokenize text "+ str(e))
+
+    
+    def remove_duplicates(self) -> None:
+        """
+        remove_duplicates method aims to remove all the additional occurances of a word in self.text.
+        This is achieved by storing the words in a dict and checking if they're present in the dict
+        already, if they the word is not already present in the dict, it is then newly stored.
+        """
+        try:
+            for word in self.text:
+                if self.dictionary.get(word, None) is None and "www" not in word:
+                    self.dictionary[word] = word
+                else:
+                    continue
+            
+            print(self.dictionary.keys())
+        except Exception as e:
+            print("The following error occurred while trying to discard duplicates " + str(e))
         
 
 
     #Destructor is responsible for closing all file handlers that have been used :)
     def __del__(self) -> None:
         self.file_handler.close()
-        #self.output_handler.close()
+        self.output_handler.close()
 
 temporary = Dictionary()
 temporary.process_regex("theWaroftheWorlds.txt")
