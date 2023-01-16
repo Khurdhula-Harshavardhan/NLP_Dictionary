@@ -61,6 +61,8 @@ class Dictionary():
             self.text = self.file_handler.readlines()
 
             self.replace_british_words()
+            self.replace_titles()
+            
         except Exception as e:
             print("The following error occured while trying to read the file: " + str(e))
        
@@ -93,6 +95,20 @@ class Dictionary():
         The change made is stored to the global variable self.text which is a list that stores all lines read from the file.
         The changes are also noted to changes_log.txt
         """
+
+        try:
+            for line in self.text:
+                for patternn in self.titles.keys():
+                    before_change = line
+                    after_change = re.sub(patternn, self.titles[patternn], line)
+
+                    if before_change != after_change:
+                        self.write_log("Replacing Titles", before_change, after_change)
+
+                    line = after_change
+                    
+        except Exception as e:
+            print(str(e))
     
     def write_log(self, calling_method, original_text, modified_text) -> None:
         """
