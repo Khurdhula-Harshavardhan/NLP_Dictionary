@@ -50,5 +50,6 @@ class Dictionary():
         except Exception as e:
             print("The following error occured while trying to read the file: " + str(e))
 
-
+    def write_log(self, method, original_text, modified_text):
+        pass
 Dictionary().process_regex("theWaroftheWorlds.txt")
