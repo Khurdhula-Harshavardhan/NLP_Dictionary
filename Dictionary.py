@@ -172,6 +172,9 @@ class Dictionary():
             self.discard_punctuations() #discards the special characters.
             self.tokenize() #breaking down the text into a list of words.
             self.remove_duplicates()
+            self.text = sorted(self.dictionary.values())
+            self.flush_output("dictionary.txt")
+            print("Output stored to dictionary.txt")
             
         except Exception as e:
             print(str(e))
@@ -210,8 +213,6 @@ class Dictionary():
                     self.dictionary[word] = word
                 else:
                     continue
-            
-            print(self.dictionary.keys())
         except Exception as e:
             print("The following error occurred while trying to discard duplicates " + str(e))
         
