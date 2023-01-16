@@ -11,6 +11,7 @@ class Dictionary():
     titles = dict()
     text= None
     log_handler = None
+    output_handler = None
     CURRENT_PATH = None
     #total_words_replaced
     #total_characters_discarded
@@ -62,7 +63,10 @@ class Dictionary():
 
             self.replace_british_words()
             self.replace_titles()
-            
+
+            if self.flush_output("regex.txt"):
+                print("Output stored to 'regex.txt'")
+
         except Exception as e:
             print("The following error occured while trying to read the file: " + str(e))
        
@@ -97,7 +101,8 @@ class Dictionary():
         """
 
         try:
-            for line in self.text:
+            for ind in range(len(self.text)):
+                line = self.text[ind]
                 for patternn in self.titles.keys():
                     before_change = line
                     after_change = re.sub(patternn, self.titles[patternn], line)
@@ -105,7 +110,7 @@ class Dictionary():
                     if before_change != after_change:
                         self.write_log("Replacing Titles", before_change, after_change)
 
-                    line = after_change
+                    self.text[ind] = after_change
                     
         except Exception as e:
             print(str(e))
@@ -122,5 +127,20 @@ class Dictionary():
 
         except Exception as e:
             print("The following error occured while trying to write changes to changes_log.txt: " + str(e))
+
+    def flush_output(self, filename) -> bool:
+        """
+        flush_output method writes all the text that has to be stored in the output file,
+        We write all of it once to the file by using handler.writelines() which enables us to pass the iterable, self.text in this case.
+        This method returns a boolean value to check that the output has been written to the file without any Tracebacks,
+        In the case that there's a unexpected error that arises during the method execution, the error is simply written to console and False is returned.
+        """
+        try:
+            self.output_handler = open(self.CURRENT_PATH + filename, "w+", encoding="UTF-8")
+            self.output_handler.writelines(self.text)
+            return True
+        except Exception as e:
+            print("The following error occured while writing output to "+ filename+ " " + str(e))
+            return False
 
 Dictionary().process_regex("theWaroftheWorlds.txt")
