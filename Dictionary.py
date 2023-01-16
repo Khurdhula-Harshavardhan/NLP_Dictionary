@@ -144,6 +144,17 @@ class Dictionary():
             print("The following error occured while writing output to "+ filename+ " " + str(e))
             return False
 
+    #PHASE II - Normalization
+    def normalize_text(self, filename) -> None:
+        """
+        The aim of this Phase is to:
+        1. Make all words of same CASE (lower)
+        2. Discard duplicates
+        3. Strip away all the punctuations
+        4. Tokenize
+        5. Flush the output to dictionary.txt
+        """
+
     #Destructor is responsible for closing all file handlers that have been used :)
     def __del__(self) -> None:
         self.file_handler.close()
