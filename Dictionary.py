@@ -16,6 +16,7 @@ class Dictionary():
     #total_words_replaced
     #total_characters_discarded
     dictionary = dict()
+    PUNCTUATIONS = str()
     
     #Constructor sets up all the global variables.
     def __init__(self) -> None:
@@ -41,6 +42,8 @@ class Dictionary():
             "Ms\.": "Miss",
             "Mrs\.": "Misses"
         }
+
+        self.PUNCTUATIONS = "[\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\]\^\_\`\{\|\}\~\“\’\”\--]"
 
         #defining a constant for current directory. 
         self.CURRENT_PATH = os.getcwd()+"/"
@@ -162,14 +165,25 @@ class Dictionary():
         5. Flush the output to dictionary.txt
         """
         try:
+            #setup the file_handler
             self.read_file(filename)
             self.text = self.file_handler.read()
-            self.text = self.text.lower()
-            self.tokenize()
-            #make all the words to be of same CASE: lower
+            self.text = self.text.lower() #setting the text case to Lower.
+            self.discard_punctuations() #discards the special characters.
+            self.tokenize() #breaking down the text into a list of words.
             
-        except:
-            print("lower cannot be used on list")
+        except Exception as e:
+            print(str(e))
+
+    def discard_punctuations(self) -> None:
+        """
+        discard_punctuations aims to delete all special characters that are present in our text.
+        This is achieved by replacing all any such special character with a regex substitution.
+        """
+        try:
+            self.text = re.sub(self.PUNCTUATIONS, "", self.text)
+        except Exception as e:
+            print("The following error occured while trying to discard special characters "+ str(e))
 
 
     def tokenize(self) -> None:
@@ -179,7 +193,7 @@ class Dictionary():
         """
         try:
             self.text = re.findall("[a-z]+",self.text)
-            print(self.text)
+            print(len(self.text))
         except Exception as e:
             print("The following error occured while trying to tokenize text "+ str(e))
         
