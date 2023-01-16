@@ -39,7 +39,7 @@ class Dictionary():
             "Ms\.": "Miss",
             "Mrs\.": "Misses"
         }
-        
+
         #defining a constant for current directory. 
         self.CURRENT_PATH = os.getcwd()+"/"
 
@@ -86,7 +86,14 @@ class Dictionary():
         except Exception as e:
             print(str(e))
     
-
+    def replace_titles(self) -> None:
+        """
+        Dictionary.replace() aims to replace the titles, that we generally address people with
+        This is achieved by using re.sub() method.
+        The change made is stored to the global variable self.text which is a list that stores all lines read from the file.
+        The changes are also noted to changes_log.txt
+        """
+    
     def write_log(self, calling_method, original_text, modified_text) -> None:
         """
         write_log method, writes three statements to changes_log.txt everytime it is called,
