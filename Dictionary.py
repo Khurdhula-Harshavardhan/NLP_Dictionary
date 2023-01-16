@@ -1,4 +1,5 @@
-
+import re
+import os
 
 class Dictionary():
     """
@@ -8,13 +9,14 @@ class Dictionary():
 
     #Constructor sets up all the global variables.
     def __init__(self) -> None:
-        try:
-            self.file_handler = open("theWarofTheWorlds.txt", encoding='UTF-8')
-            print("Successfully opened the file.")
-            self.printer()
-        except Exception as e:
-            print("The following error occured while trying to read the file: "+str(e))
+        pass
 
+def process_regex(self, filename) -> None:
+    """
+    We shall use the lib "os" module, which provides us with a method: os.getcwd(),
+    to eliminate any possible directory/file path errors with the read of the file.
+    """
+    
 
 
 Dictionary()
