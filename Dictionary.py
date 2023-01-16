@@ -8,6 +8,7 @@ class Dictionary():
     """
     file_handler = None
     british_to_american_text_patterns = dict()
+    titles = dict()
     text= None
     log_handler = None
     CURRENT_PATH = None
@@ -32,6 +33,13 @@ class Dictionary():
             "[pP]retence": "pretense"
         }
 
+        self.titles = {
+            "Dr\.": "Doctor",
+            "Mr\.": "Mister",
+            "Ms\.": "Miss",
+            "Mrs\.": "Misses"
+        }
+        
         #defining a constant for current directory. 
         self.CURRENT_PATH = os.getcwd()+"/"
 
