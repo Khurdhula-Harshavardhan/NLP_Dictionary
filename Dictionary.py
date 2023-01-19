@@ -70,12 +70,13 @@ class Dictionary():
             print("Failed to process text!")
        
 
-    def replace_british_words(self) -> list():
+    def replace_british_words(self) -> str():
         """
         Dictionary.replace_british_words() aims to replace words captured by SINGLE REGEX, with counter part American words.
         This is achieved by using re.sub() method.
         The change made is stored to the global variable self.text which is a list that stores all lines read from the file.
         The changes are also noted to changes_log.txt
+        The repalced version of the entire text is then returned.
         """
 
         try:
