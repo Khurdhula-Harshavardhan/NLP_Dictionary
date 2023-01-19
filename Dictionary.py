@@ -7,34 +7,22 @@ class Dictionary():
     Global Variables.
     """
     file_handler = None
-    british_to_american_text_patterns = dict()
     titles = dict()
     text= None
     log_handler = None
     output_handler = None
     CURRENT_PATH = None
-    #total_words_replaced
-    #total_characters_discarded
+    total_words_replaced = int()
+    total_words_discarded = int()
+    total_characters_discarded = int()
     dictionary = dict()
     PUNCTUATIONS = str()
     
     #Constructor sets up all the global variables.
     def __init__(self) -> None:
-
-        #storing all the matching words inorder to make it easier for retrival with a dict()
-        self.british_to_american_text_patterns ={
-            "[Cc]olour":"color",
-            "[Nn]eighbour":"neighbor",
-            "[Hh]omour": "humor",
-            "[Ll]abour": "labor",
-            "[Ff]lavour": "flavor",
-            "[aA]nalyse": "analyze",
-            "[pP]aralyse": "paralyze",
-            "[dD]efence": "defence",
-            "[lL]icence": "license",
-            "[oO]ffence": "offense",
-            "[pP]retence": "pretense"
-        }
+        self.total_characters_discarded = 0
+        self.total_words_discarded = 0
+        self.total_words_replaced = 0
 
         self.titles = {
             "Dr\.": "Doctor",
@@ -72,29 +60,28 @@ class Dictionary():
         try:
             self.read_file(filename)
             self.text = self.file_handler.read()
-            self.text = self.replace_british_words()
+            self.text = self.replace_british_words() #replaces all British spelled words, with American equivalents.
             self.text = self.text.split("\n")
-            self.replace_titles()
+            self.replace_titles() #replaces all titles used to address people.
 
             if self.flush_output("regex.txt"):
-                print("Output stored to 'regex.txt'")
+                print("Output stored to 'regex.txt'") #writing output to regex.txt
         except:
             print("Failed to process text!")
        
 
     def replace_british_words(self) -> list():
         """
-        Dictionary.replace_british_words() aims to replace words captured by patterns in the dict we have, with counter part American words.
+        Dictionary.replace_british_words() aims to replace words captured by SINGLE REGEX, with counter part American words.
         This is achieved by using re.sub() method.
         The change made is stored to the global variable self.text which is a list that stores all lines read from the file.
         The changes are also noted to changes_log.txt
         """
 
         try:
-            for patternn in self.british_to_american_text_patterns.keys():
-                self.text = re.sub(patternn, self.british_to_american_text_patterns[patternn], self.text)
-                self.write_log("Replacing British Words using the pattern:", patternn , self.british_to_american_text_patterns[patternn])
-
+            self.total_words_replaced = self.total_words_replaced + len(re.findall("(?<=.)our",self.text))
+            self.text = re.sub("(?<=.)our", "or", self.text) #a single regular exp that matches with British words like Colour, Neighbour, but not 'our'.
+            self.write_log("Replacing British Words using the pattern:", "words ending with our" , "by .+or")
             return self.text
         except Exception as e:
             print(str(e))
@@ -185,6 +172,7 @@ class Dictionary():
         This is achieved by replacing all any such special character with a regex substitution.
         """
         try:
+            self.total_characters_discarded = self.total_characters_discarded + len(re.findall(self.PUNCTUATIONS, self.text))
             self.text = re.sub(self.PUNCTUATIONS, "", self.text)
         except Exception as e:
             print("The following error occured while trying to discard special characters "+ str(e))
@@ -211,7 +199,9 @@ class Dictionary():
             for word in self.text:
                 if self.dictionary.get(word, None) is None and "www" not in word:
                     self.dictionary[word] = word
+                    self.write_log("Removing duplicates of the word: ", word, " by storing it's single occurance and discarding the rest.")
                 else:
+                    self.total_words_discarded = self.total_words_discarded + 1
                     continue
         except Exception as e:
             print("The following error occurred while trying to discard duplicates " + str(e))
@@ -220,6 +210,9 @@ class Dictionary():
 
     #Destructor is responsible for closing all file handlers that have been used :)
     def __del__(self) -> None:
+        print("Total number of Characters discarded: " + str(self.total_characters_discarded))
+        print("Total number of words replaced: "+ str(self.total_words_replaced))
+        print("Total number of words deleted: " + str(self.total_words_discarded))
         self.file_handler.close()
         self.output_handler.close()
 
