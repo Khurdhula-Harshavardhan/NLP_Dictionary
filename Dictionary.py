@@ -217,6 +217,3 @@ class Dictionary():
         self.file_handler.close()
         self.output_handler.close()
 
-temporary = Dictionary()
-temporary.process_regex("theWaroftheWorlds.txt")
-temporary.normalize_text("regex.txt")
