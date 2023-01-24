@@ -55,6 +55,10 @@ class Dictionary():
         because the first method to be called, while executing this script is:
         Dictionary.process_regex(filename) 
         Hence the parameter is passed here.
+
+        Dictionary.process_regex() has following method calls which implement two main ideas.
+        self.replace_british_words()
+        self.replace_titles()
         """
 
         try:
@@ -159,8 +163,8 @@ class Dictionary():
             self.text = self.text.lower() #setting the text case to Lower.
             self.discard_punctuations() #discards the special characters.
             self.tokenize() #breaking down the text into a list of words.
-            self.remove_duplicates()
-            self.text = sorted(self.dictionary.values())
+            self.remove_duplicates() #removes duplicates of a specific word.
+            self.text = sorted(self.dictionary.values()) #sorting the words into lexicographical order.
             self.flush_output("dictionary.txt")
             print("Output stored to dictionary.txt")
             
